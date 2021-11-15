@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import {v4 as uuidv4} from 'uuid';
 
 module.exports = {
     up: (queryInterface, Sequelize) =>
@@ -33,6 +33,10 @@ module.exports = {
                 defaultValue: false
             },
             blocked: {
+                type: Sequelize.BOOLEAN,
+                defaultValue: false
+            },
+            admin: {
                 type: Sequelize.BOOLEAN,
                 defaultValue: false
             },

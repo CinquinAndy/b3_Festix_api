@@ -1,28 +1,76 @@
-/**
- * Find or create user ( where email )
- * @param model
- * @param payload
- * @returns {Promise<[Model, boolean]>}
- */
-export const createUser = (model, payload) =>
-    model.create({
-        id:payload.id,
-        firstName: payload.firstName,
-        lastName: payload.lastName,
-        email: payload.email,
-        password: payload.password
-    });
+import Model from "../../models";
+import {v4 as uuidv4} from "uuid";
 
+const {User} = Model;
 
-/**
- * Find user by email
- * @param model
- * @param email
- * @returns {Promise<Model> | Promise<Model | null>}
- */
-export const findUser = (model, email) =>
-    model.findOne({
-        where: {
-            email: email
+export const findAllArtist = model =>
+    model.findAll(
+        {
+            include: [
+                {
+                    model: User,
+                    as: "Users",
+                    required: true
+                }
+            ],
         }
-    });
+    )
+
+export const findAllArtistByName = (model, artistName) =>
+    model.findAll(
+        {
+            where: {
+                artistName: artistName
+            },
+            include: [
+                {
+                    model: User,
+                    as: "Users",
+                    required: true
+                }
+            ],
+        }
+    )
+
+export const findAllArtistById = (model, id) =>
+    model.findByPk(
+        {
+            where: {
+                id: id
+            },
+            include: [
+                {
+                    model: User,
+                    as: "Users",
+                    required: true
+                }
+            ],
+        }
+    )
+
+export const findAllArtistByIdUser = (model, id_user) =>
+    model.findOne(
+        {
+            where: {
+                id_user: id_user
+            },
+            include: [
+                {
+                    model: User,
+                    as: "Users",
+                    required: true
+                }
+            ],
+        }
+    )
+
+export const createArtist = (model, payload) =>
+    model.create({
+            "id": payload.id,
+            "artistName": payload.artistName,
+            "description": payload.description,
+            "musicStyle": payload.musicStyle,
+            "photo": payload.photo,
+            "id_user": payload.id_user
+        }
+    )

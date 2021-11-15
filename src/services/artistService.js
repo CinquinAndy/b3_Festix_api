@@ -1,111 +1,98 @@
 import _ from "lodash";
 import catchAsync from "../libs/catchAsync";
 import Model from "../models";
-import {jwtToUser} from "../libs/who";
-import {findUser} from "./request/user";
-import {findAll, findByPk} from "./request/generic";
+import {
+    createArtist,
+    findAllArtist,
+    findAllArtistById,
+    findAllArtistByIdUser,
+    findAllArtistByName
+} from "./request/artist";
+import {hashPassword} from "../libs/passwordOp";
+import {createUser, findUser} from "./request/user";
+import {v4 as uuidv4} from "uuid";
 
-const {User} = Model;
+const {Artist} = Model;
 
-export const userService_getAllUsers = catchAsync(async (req, res, next) => {
-    const users = await findAll(User);
-    const body = users.map(user => _.omit(user.toJSON(), ["password", "changedPassword", "createdAt", "updatedAt"]));
+export const getAllArtistService = catchAsync(async (req, res, next) => {
+    const artists = await findAllArtist(Artist)
 
-    return res.status(200).json({
-        status: "success",
-        payload: body
-    });
-})
-
-export const userService_getUser = catchAsync(async (req, res, next) => {
-    const user_email = req.params['user_email'];
-    const user = await findUser(User, user_email);
-    const body = _.omit(user.toJSON(), ["password", "changedPassword", "createdAt", "updatedAt"]);
-
-    if (_.isEmpty(user)) {
-        return res.status(400).json({
-            status: "The user does not exist"
-        });
-    }
+    const body = artists.map(artist => _.omit(artist.toJSON(), []));
 
     return res.status(200).json({
         status: "success",
         payload: body
     });
 })
-
-export const userService_getMe = catchAsync(async (req, res, next) => {
-    const actualUser = await jwtToUser(req.cookies.__act, req.cookies.__rt, res, next);
-
-    const user_email = actualUser['email'];
-    const user = await findUser(User, user_email);
-    const body = _.omit(user.toJSON(), ["password", "changedPassword", "createdAt", "updatedAt"]);
-
-    if (_.isEmpty(user)) {
-        return res.status(400).json({
-            status: "The user does not exist"
-        });
-    }
+export const getArtistFromNameService = catchAsync(async (req, res, next) => {
+    const artistName = req.params.artistName;
+    const artist = await findAllArtistByName(Artist, artistName);
 
     return res.status(200).json({
         status: "success",
-        payload: body
+        payload: artist
     });
 })
-
-export const userService_patchMe = catchAsync(async (req, res, next) => {
-    const actualUser = await jwtToUser(req.cookies.__act, req.cookies.__rt, res, next);
-
-    const user_email = actualUser['email'];
-    const user = await findUser(User, user_email);
-    user.firstName = req.body.firstName;
-    user.lastName = req.body.lastName;
-    user.email = req.body.email;
-    user.photo = req.body.photo;
-    await user.save();
-    const body = _.omit(user.toJSON(), ["password", "changedPassword", "createdAt", "updatedAt"]);
-
-    if (_.isEmpty(user)) {
-        return res.status(400).json({
-            status: "The user does not exist"
-        });
-    }
+export const getArtistFromIdArtistService = catchAsync(async (req, res, next) => {
+    const id = req.params.id;
+    const artist = await findAllArtistById(Artist, id);
 
     return res.status(200).json({
         status: "success",
-        payload: body
+        payload: artist
     });
 })
-
-export const userService_deleteFromEmail = catchAsync(async (req, res, next) => {
-    const user_email = req.params['user_email'];
-    const user = await findUser(User, user_email);
-    await user.destroy();
-
-    if (_.isEmpty(user)) {
-        return res.status(400).json({
-            status: "The user does not exist"
-        });
-    }
+export const getArtistFromIdUserService = catchAsync(async (req, res, next) => {
+    const id_user = req.params.id_user;
+    const artist = await findAllArtistByIdUser(Artist, id_user);
 
     return res.status(200).json({
-        status: "success - deleted",
+        status: "success",
+        payload: artist
     });
 })
 
-export const userService_deleteFromId = catchAsync(async (req, res, next) => {
-    const id_user = req.params['id_user'];
-    const user = await findByPk(User, id_user);
-    await user.destroy();
+export const addArtistService = catchAsync(async (req, res, next) => {
+    const artistName = req.body.artistName;
+    const description = req.body.description;
+    const musicStyle = req.body.musicStyle;
+    const photo = req.body.photo;
+    const id_user = req.body.id_user;
 
-    if (_.isEmpty(user)) {
-        return res.status(400).json({
-            status: "The user does not exist"
+    const artistFinded = await findAllArtistByIdUser(Artist, id_user)
+
+    if (!artistFinded) {
+        const created = await createArtist(Artist, {
+            id: uuidv4(),
+            artistName: req.body.artistName,
+            description: req.body.description,
+            musicStyle: req.body.musicStyle,
+            photo: req.body.photo,
+            id_user: req.body.id_user
         });
+        if (!created) {
+            return res.status(400).json({
+                status: "fail",
+                message: "error on creating artist",
+            });
+        } else {
+            return res.status(201).json({
+                status: "success",
+                message: "Artist successfully created",
+                payload: _.omit(JSON.parse(JSON.stringify(created)), [])
+            });
+        }
     }
 
-    return res.status(200).json({
-        status: "success - deleted",
+    return res.status(400).json({
+        status: "fail",
+        message: "Artist already exist"
     });
 })
 
+export const updateArtistService = catchAsync(async (req, res, next) => {
+
+})
+export const deleteArtistService = catchAsync(async (req, res, next) => {
+
+})

@@ -34,6 +34,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: true
             },
+            admin: {
+                type: DataTypes.BOOLEAN,
+                allowNull: false
+            },
             verified: {
                 type: DataTypes.BOOLEAN,
                 allowNull: false,

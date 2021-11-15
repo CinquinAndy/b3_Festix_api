@@ -1,29 +1,33 @@
 import catchAsync from "../libs/catchAsync";
 import {
-    userService_delete, userService_deleteFromEmail, userService_deleteFromId,
-    userService_getAllUsers,
-    userService_getMe,
-    userService_getUser,
-    userService_patchMe
-} from "../services/userService";
+    addArtistService, deleteArtistService,
+    getAllArtistService,
+    getArtistFromIdArtistService,
+    getArtistFromIdUserService,
+    getArtistFromNameService, updateArtistService
+} from "../services/artistService";
 
-export const getAllUsers = catchAsync(async (req, res, next) => {
-    await userService_getAllUsers(req, res, next);
-});
-
-export const getUser = catchAsync(async (req, res, next)=>{
-    await userService_getUser(req,res,next);
+export const getAllArtist = catchAsync(async (req, res, next) => {
+    await getAllArtistService(req, res, next);
 })
 
-export const getMe = catchAsync(async (req, res, next)=>{
-    await userService_getMe(req,res,next);
+export const getArtistFromName = catchAsync(async (req, res, next) => {
+    await getArtistFromNameService(req, res, next);
 })
-export const patchMe = catchAsync(async (req, res, next)=>{
-    await userService_patchMe(req,res,next);
+
+export const getArtistFromIdArtist = catchAsync(async (req, res, next) => {
+    await getArtistFromIdArtistService(req, res, next);
 })
-export const deleteFromEmail = catchAsync(async (req, res, next)=>{
-    await userService_deleteFromEmail(req,res,next);
+
+export const getArtistFromIdUser = catchAsync(async (req, res, next) => {
+    await getArtistFromIdUserService(req, res, next);
 })
-export const deleteFromId = catchAsync(async (req, res, next)=>{
-    await userService_deleteFromId(req,res,next);
+export const addArtist = catchAsync(async (req, res, next) => {
+    await addArtistService(req, res, next);
+})
+export const updateArtist = catchAsync(async (req, res, next) => {
+    await updateArtistService(req, res, next);
+})
+export const deleteArtist = catchAsync(async (req, res, next) => {
+    await deleteArtistService(req, res, next);
 })
