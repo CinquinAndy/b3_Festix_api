@@ -15,7 +15,7 @@ router.get("/name/:artistName", jwtProtect, getArtistFromName);
 router.get("/id-artist/:id", jwtProtect, getArtistFromIdArtist);
 router.get("/id-user/:id_user", jwtProtect, getArtistFromIdUser);
 router.post("/", jwtProtect, addArtist);
-router.patch("/", jwtProtect, updateArtist);
-router.delete("/", jwtProtect, deleteArtist);
+router.patch("/:id", jwtProtect, updateArtist);
+router.delete("/:id", jwtProtect, deleteArtist);
 
 export default router;

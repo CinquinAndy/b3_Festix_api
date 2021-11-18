@@ -53,10 +53,6 @@ export const getArtistFromIdUserService = catchAsync(async (req, res, next) => {
 })
 
 export const addArtistService = catchAsync(async (req, res, next) => {
-    const artistName = req.body.artistName;
-    const description = req.body.description;
-    const musicStyle = req.body.musicStyle;
-    const photo = req.body.photo;
     const id_user = req.body.id_user;
 
     const artistFinded = await findAllArtistByIdUser(Artist, id_user)
@@ -91,8 +87,30 @@ export const addArtistService = catchAsync(async (req, res, next) => {
 })
 
 export const updateArtistService = catchAsync(async (req, res, next) => {
+    const id_artist = req.params.id;
+    const artist = await findAllArtistById(Artist, id_artist);
 
+    artist.artistName = req.body.artistName ?? artist.artistName;
+    artist.description = req.body.description ?? artist.description;
+    artist.musicStyle = req.body.musicStyle ?? artist.musicStyle;
+    artist.photo = req.body.photo ?? artist.photo;
+    artist.id_user = req.body.id_user ?? artist.id_user;
+
+    artist.save();
+
+    return res.status(200).json({
+        status: "success",
+        payload: artist
+    });
 })
 export const deleteArtistService = catchAsync(async (req, res, next) => {
+    const id_artist = req.params.id;
+    const artist = await findAllArtistById(Artist, id_artist);
 
+    artist.destroy();
+
+    return res.status(200).json({
+        status: "success",
+        message: "deleted !"
+    });
 })
