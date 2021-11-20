@@ -1,5 +1,6 @@
 import Model from "../../models";
 import {v4 as uuidv4} from "uuid";
+import {Op} from "sequelize";
 
 const {User} = Model;
 const {Artist} = Model;
@@ -8,32 +9,48 @@ const {Festival} = Model;
 export const findAllEvent = model =>
     model.findAll(
         {
-            // include: [
-            //     {
-            //         model: Artist,
-            //         as: "Artists",
-            //         required: true
-            //     },
-            //     {
-            //         model: Festival,
-            //         as: "Festivals",
-            //         required: true
-            //     },
-            // ],
+            include: [
+                {
+                    model: Artist,
+                    as: "Artists",
+                    include: [
+                        {
+                            model: User,
+                            as: "Users",
+                            attributes: ["firstName", "lastName", "email"],
+                        }
+                    ],
+                },
+                {
+                    model: Festival,
+                    as: "Festivals",
+                    required: true
+                },
+            ],
         }
     )
 
 export const findEventById = (model, id) =>
     model.findByPk(id,
         {
-            // include: [
-            //     {
-            //         model: User,
-            //         as: "Users",
-            //         required: true,
-            //         attributes: ["firstName", "lastName", "email"],
-            //     }
-            // ],
+            include: [
+                {
+                    model: Artist,
+                    as: "Artists",
+                    include: [
+                        {
+                            model: User,
+                            as: "Users",
+                            attributes: ["firstName", "lastName", "email"],
+                        }
+                    ],
+                },
+                {
+                    model: Festival,
+                    as: "Festivals",
+                    required: true
+                },
+            ],
         }
     )
 
@@ -43,14 +60,24 @@ export const findEventByTitle = (model, title) =>
             where: {
                 title: title
             },
-            // include: [
-            //     {
-            //         model: User,
-            //         as: "Users",
-            //         required: true,
-            //         attributes: ["firstName", "lastName", "email"],
-            //     }
-            // ],
+            include: [
+                {
+                    model: Artist,
+                    as: "Artists",
+                    include: [
+                        {
+                            model: User,
+                            as: "Users",
+                            attributes: ["firstName", "lastName", "email"],
+                        }
+                    ],
+                },
+                {
+                    model: Festival,
+                    as: "Festivals",
+                    required: true
+                },
+            ],
         }
     )
 
@@ -62,5 +89,22 @@ export const createEvent = (model, payload) =>
             "photo": payload.photo,
             "hour": payload.hour,
             "id_festival": payload.id_festival
+        }
+    )
+
+export const addArtistToEvent = (model, payload) =>
+    model.create({
+        "id_artist": payload.id_artist,
+        "id_event": payload.id_event
+    })
+
+export const findByBoth = (model, payload) =>
+    model.findOne({
+            where: {
+                [Op.and]: [
+                    {id_artist: payload.id_artist},
+                    {id_event: payload.id_event}
+                ]
+            },
         }
     )

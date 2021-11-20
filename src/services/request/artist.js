@@ -34,7 +34,7 @@ export const findAllArtistByName = (model, artistName) =>
         }
     )
 
-export const findAllArtistById = (model, id) =>
+export const findArtistById = (model, id) =>
     model.findByPk(id,
         {
             include: [

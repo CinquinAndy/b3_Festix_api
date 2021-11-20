@@ -6,36 +6,10 @@ const {Artist} = Model;
 const {Festival} = Model;
 
 export const findAllFestival = model =>
-    model.findAll(
-        {
-            // include: [
-            //     {
-            //         model: Artist,
-            //         as: "Artists",
-            //         required: true
-            //     },
-            //     {
-            //         model: Festival,
-            //         as: "Festivals",
-            //         required: true
-            //     },
-            // ],
-        }
-    )
+    model.findAll()
 
 export const findFestivalById = (model, id) =>
-    model.findByPk(id,
-        {
-            // include: [
-            //     {
-            //         model: User,
-            //         as: "Users",
-            //         required: true,
-            //         attributes: ["firstName", "lastName", "email"],
-            //     }
-            // ],
-        }
-    )
+    model.findByPk(id)
 
 export const findFestivalByTitle = (model, title) =>
     model.findAll(
@@ -43,14 +17,6 @@ export const findFestivalByTitle = (model, title) =>
             where: {
                 title: title
             },
-            // include: [
-            //     {
-            //         model: User,
-            //         as: "Users",
-            //         required: true,
-            //         attributes: ["firstName", "lastName", "email"],
-            //     }
-            // ],
         }
     )
 

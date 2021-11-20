@@ -4,7 +4,7 @@ import Model from "../models";
 import {
     createArtist,
     findAllArtist,
-    findAllArtistById,
+    findArtistById,
     findAllArtistByIdUser,
     findAllArtistByName
 } from "./request/artist";
@@ -35,7 +35,7 @@ export const getArtistFromNameService = catchAsync(async (req, res, next) => {
 })
 export const getArtistFromIdArtistService = catchAsync(async (req, res, next) => {
     const id = req.params.id;
-    const artist = await findAllArtistById(Artist, Number(id));
+    const artist = await findArtistById(Artist, Number(id));
 
     return res.status(200).json({
         status: "success",
@@ -87,7 +87,7 @@ export const addArtistService = catchAsync(async (req, res, next) => {
 
 export const updateArtistService = catchAsync(async (req, res, next) => {
     const id_artist = req.params.id;
-    const artist = await findAllArtistById(Artist, id_artist);
+    const artist = await findArtistById(Artist, id_artist);
 
     artist.artistName = req.body.artistName ?? artist.artistName;
     artist.description = req.body.description ?? artist.description;
@@ -104,7 +104,7 @@ export const updateArtistService = catchAsync(async (req, res, next) => {
 })
 export const deleteArtistService = catchAsync(async (req, res, next) => {
     const id_artist = req.params.id;
-    const artist = await findAllArtistById(Artist, id_artist);
+    const artist = await findArtistById(Artist, id_artist);
 
     artist.destroy();
 
