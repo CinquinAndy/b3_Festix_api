@@ -2,14 +2,14 @@ const {v4: uuidv4} = require("uuid");
 
 module.exports = {
     up: (queryInterface, Sequelize) =>
-        queryInterface.createTable('Artists', {
+        queryInterface.createTable('Events', {
             id: {
-                type: Sequelize.INTEGER,
                 allowNull: false,
-                autoIncrement: true,
                 primaryKey: true,
+                type: Sequelize.UUID,
+                defaultValue: uuidv4()
             },
-            artistName: {
+            title: {
                 type: Sequelize.STRING,
                 allowNull: false
             },
@@ -17,20 +17,19 @@ module.exports = {
                 type: Sequelize.STRING,
                 allowNull: false
             },
-            musicStyle: {
-                type: Sequelize.STRING,
-                allowNull: false
-            },
             photo: {
                 type: Sequelize.STRING,
-                allowNull: false
+                allowNull: true
             },
-            id_user: {
-                type: Sequelize.UUID,
+            hour: {
+                type: Sequelize.DATE,
+                allowNull: true
+            },
+            id_festival: {
                 allowNull: false,
-                unique: true,
+                type: Sequelize.UUID,
                 references: {
-                    model: 'Users',
+                    model: 'Festivals',
                     key: 'id'
                 },
                 onUpdate: 'cascade',
@@ -45,5 +44,5 @@ module.exports = {
                 type: Sequelize.DATE
             }
         }),
-    down: queryInterface => queryInterface.dropTable('Artists')
+    down: queryInterface => queryInterface.dropTable('Events')
 };

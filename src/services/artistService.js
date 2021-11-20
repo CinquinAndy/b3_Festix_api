@@ -35,7 +35,7 @@ export const getArtistFromNameService = catchAsync(async (req, res, next) => {
 })
 export const getArtistFromIdArtistService = catchAsync(async (req, res, next) => {
     const id = req.params.id;
-    const artist = await findAllArtistById(Artist, id);
+    const artist = await findAllArtistById(Artist, Number(id));
 
     return res.status(200).json({
         status: "success",
@@ -59,7 +59,6 @@ export const addArtistService = catchAsync(async (req, res, next) => {
 
     if (!artistFinded) {
         const created = await createArtist(Artist, {
-            id: uuidv4(),
             artistName: req.body.artistName,
             description: req.body.description,
             musicStyle: req.body.musicStyle,

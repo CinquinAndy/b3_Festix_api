@@ -4,4 +4,7 @@ public."Users"
 
 sequelize db:migrate
 
-npx sequelize-cli model:generate --name Message --attributes date:date,content:string,id_conversation:uuid
+npx sequelize-cli model:generate --name Event --attributes date:date,content:string,id_conversation:uuid
+npx sequelize-cli model:generate --name Event --attributes title:string,description:string,photo:string,hour:date,id_festival:uuid
+npx sequelize-cli model:generate --name Festival --attributes title:string,description:string,photo:string,date:date
+npx sequelize-cli model:generate --name Artist_event --attributes id_artist:uuid,id_event:uuid

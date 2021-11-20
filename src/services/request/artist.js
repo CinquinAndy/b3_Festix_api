@@ -10,7 +10,8 @@ export const findAllArtist = model =>
                 {
                     model: User,
                     as: "Users",
-                    required: true
+                    required: true,
+                    attributes: ["firstName", "lastName", "email"],
                 }
             ],
         }
@@ -26,30 +27,29 @@ export const findAllArtistByName = (model, artistName) =>
                 {
                     model: User,
                     as: "Users",
-                    required: true
+                    required: true,
+                    attributes: ["firstName", "lastName", "email"],
                 }
             ],
         }
     )
 
 export const findAllArtistById = (model, id) =>
-    model.findByPk(
+    model.findByPk(id,
         {
-            where: {
-                id: id
-            },
             include: [
                 {
                     model: User,
                     as: "Users",
-                    required: true
+                    required: true,
+                    attributes: ["firstName", "lastName", "email"],
                 }
             ],
         }
     )
 
 export const findAllArtistByIdUser = (model, id_user) =>
-    model.findOne(
+    model.findAll(
         {
             where: {
                 id_user: id_user
@@ -58,7 +58,8 @@ export const findAllArtistByIdUser = (model, id_user) =>
                 {
                     model: User,
                     as: "Users",
-                    required: true
+                    required: true,
+                    attributes: ["firstName", "lastName", "email"],
                 }
             ],
         }

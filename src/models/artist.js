@@ -36,9 +36,13 @@ module.exports = (sequelize, DataTypes) => {
         },
         {}
     );
-    Artist.associate = ({User}) => {
+    Artist.associate = ({User,Event}) => {
 // associations can be defined here
-        Artist.belongsTo(User, {as: 'Users', foreignKey: 'id', sourceKey: "id_user"})
+        User.hasOne(Artist, {as: 'Artists', foreignKey: 'id'})
+        Artist.belongsTo(User, {as: 'Users', foreignKey: 'id_user'})
+
+        Artist.belongsToMany(Event, {through: 'Artist_events', foreignKey: "id_artist"})
+
     };
     return Artist;
 };
